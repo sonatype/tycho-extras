@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.sonatype.tycho</groupId>
+    <artifactId>tycho-extras</artifactId>
+    <version>0.10.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>tycho-extras-its</artifactId>
+
+  <name>Tycho Extras Integration Tests</name>
+
+  <properties>
+    <tycho-build-version>${project.version}</tycho-build-version>
+    <maven-dir>${project.build.directory}/apache-maven-${maven-version}</maven-dir>
+  </properties>
+
+  <build>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>false</filtering>
+        <excludes>
+          <exclude>**/*.properties</exclude>
+        </excludes>
+      </testResource>
+    </testResources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>maven-properties-plugin</artifactId>
+        <version>0.0.2</version>
+        <executions>
+          <execution>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>filter-file</goal>
+            </goals>
+            <configuration>
+              <in>src/test/resources/baseTest.properties</in>
+              <outDir>target/test-classes/</outDir>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-maven</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeArtifactIds>apache-maven</includeArtifactIds>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.5</version>
+        <configuration>
+          <failIfNoTests>true</failIfNoTests>
+          <systemPropertyVariables>
+            <it.cliOptions>${it.cliOptions}</it.cliOptions>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>apache-maven</artifactId>
+      <version>${maven-version}</version>
+      <classifier>bin</classifier>
+      <type>tar.gz</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>tycho-p2-runtime</artifactId>
+      <version>${tycho-build-version}</version>
+      <type>zip</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-verifier</artifactId>
+      <version>1.2</version>
+    </dependency>
+    
+
+    <!-- artifacts to be tested -->
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>tycho-osgi-components</artifactId>
+      <version>${tycho-build-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>tycho-maven-plugin</artifactId>
+      <version>${tycho-build-version}</version>
+      <type>maven-plugin</type>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>maven-tycho-plugin</artifactId>
+      <version>${tycho-build-version}</version>
+      <type>maven-plugin</type>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>maven-osgi-compiler-plugin</artifactId>
+      <version>${tycho-build-version}</version>
+      <type>maven-plugin</type>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>maven-osgi-packaging-plugin</artifactId>
+      <version>${tycho-build-version}</version>
+      <type>maven-plugin</type>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>maven-osgi-test-plugin</artifactId>
+      <version>${tycho-build-version}</version>
+      <type>maven-plugin</type>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>maven-osgi-source-plugin</artifactId>
+      <version>${tycho-build-version}</version>
+      <type>maven-plugin</type>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>tycho-p2-plugin</artifactId>
+      <version>${tycho-build-version}</version>
+      <type>maven-plugin</type>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>target-platform-configuration</artifactId>
+      <version>${tycho-build-version}</version>
+      <type>maven-plugin</type>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>tycho</artifactId>
+      <version>${tycho-build-version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+    	<groupId>org.sonatype.tycho</groupId>
+    	<artifactId>tycho-its</artifactId>
+    	<version>0.10.0-SNAPSHOT</version>
+    	<type>jar</type>
+    </dependency>
+    <dependency>
+    	<groupId>junit</groupId>
+    	<artifactId>junit</artifactId>
+    	<version>4.7</version>
+    	<type>jar</type>
+    	<scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>
