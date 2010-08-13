@@ -23,7 +23,7 @@
 	</properties>
 
 	<modules>
-		<module>tycho-emma-coverage-plugin</module>
+		<module>tycho-emma</module>
 	</modules>
 
 	<dependencyManagement>
@@ -33,6 +33,11 @@
 				<artifactId>maven-plugin-api</artifactId>
 				<version>${maven-version}</version>
 			</dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-compat</artifactId>
+        <version>${maven-version}</version>
+      </dependency>
 			<dependency>
 				<groupId>org.apache.maven</groupId>
 				<artifactId>maven-core</artifactId>
@@ -73,7 +78,6 @@
 				<plugin>
 					<groupId>org.codehaus.plexus</groupId>
 					<artifactId>plexus-component-metadata</artifactId>
-<!--					<version>${plexusVersion}</version>-->
 					<executions>
 						<execution>
 							<goals>
@@ -123,13 +127,5 @@
 		</repository>
 	</repositories>
 
-	<profiles>
-		<profile>
-			<id>its</id>
-			<modules>
-				<module>its</module>
-			</modules>
-		</profile>
-	</profiles>
 
 </project>

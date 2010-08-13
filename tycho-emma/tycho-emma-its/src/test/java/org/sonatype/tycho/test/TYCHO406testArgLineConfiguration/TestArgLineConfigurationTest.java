@@ -1,6 +1,7 @@
 package org.sonatype.tycho.test.TYCHO406testArgLineConfiguration;
 
 import java.io.File;
+
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
@@ -18,11 +19,11 @@ public class TestArgLineConfigurationTest
     public void testLocalMavenRepository()
         throws Exception
     {
-        Verifier verifier = getVerifier( "TYCHO406testArgLineConfiguration/eclemma" );
+        Verifier verifier = getVerifier( "TYCHO406testArgLineConfiguration/eclemma" ,false);
         verifier.executeGoal( "install" );
         verifier.verifyErrorFreeLog();
 
-        verifier = getVerifier( "TYCHO406testArgLineConfiguration" );
+        verifier = getVerifier( "TYCHO406testArgLineConfiguration",false );
         verifier.executeGoal( "install" );
         verifier.verifyErrorFreeLog();
 
