@@ -24,6 +24,7 @@
 
 	<modules>
 		<module>tycho-emma</module>
+        <module>tycho-version-bump-plugin</module>
 	</modules>
 
 	<dependencyManagement>
@@ -127,5 +128,38 @@
 		</repository>
 	</repositories>
 
-
+    <profiles>
+        <profile>
+          <id>m2e</id>
+          <activation>
+            <property>
+              <name>m2e.version</name>
+            </property>
+          </activation>
+          <build>
+            <plugins>
+              <plugin>
+                <groupId>org.maven.ide.eclipse</groupId>
+                <artifactId>lifecycle-mapping</artifactId>
+                <version>0.10.0</version>
+                <configuration>
+                  <mappingId>customizable</mappingId>
+                  <configurators>
+                    <configurator id="org.maven.ide.eclipse.jdt.javaConfigurator" />
+                    <configurator id="org.maven.ide.eclipse.modello.modelloConfigurator" />
+                    <configurator id="org.maven.ide.eclipse.plexus.annotations.plexusConfigurator" />
+                    <configurator id="org.maven.ide.eclipse.mavenarchiver.pomProperties" />
+                    <configurator id="maven-bundle-plugin" />
+                  </configurators>
+                  <mojoExecutions>
+                    <mojoExecution>org.apache.maven.plugins:maven-resources-plugin::</mojoExecution>
+                    <mojoExecution>org.apache.maven.plugins:maven-plugin-plugin::descriptor</mojoExecution>
+                  </mojoExecutions>
+                </configuration>
+              </plugin>
+    
+            </plugins>
+          </build>
+        </profile>
+    </profiles>
 </project>
