@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.sonatype.tycho</groupId>
+		<artifactId>tycho-extras</artifactId>
+		<version>0.11.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>tycho-p2-extras-plugin</artifactId>
+	<packaging>maven-plugin</packaging>
+
+	<name>Tycho P2 Extras Plugin</name>
+
+	<properties>
+		<tycho-build-version>${project.version}</tycho-build-version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-plugin-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.sonatype.tycho</groupId>
+			<artifactId>tycho-p2-facade</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.sonatype.tycho</groupId>
+			<artifactId>tycho-testing-harness</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>maven-properties-plugin</artifactId>
+				<version>0.0.2</version>
+				<executions>
+					<execution>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>filter-file</goal>
+						</goals>
+						<configuration>
+							<in>src/test/resources/baseTest.properties</in>
+							<outDir>target/test-classes/</outDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
