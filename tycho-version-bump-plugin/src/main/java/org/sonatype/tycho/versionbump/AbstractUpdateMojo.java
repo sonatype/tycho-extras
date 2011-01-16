@@ -13,11 +13,9 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.codehaus.tycho.maven.TychoP2RuntimeLocator;
 import org.codehaus.tycho.utils.ExecutionEnvironmentUtils;
 import org.codehaus.tycho.utils.PlatformPropertiesUtils;
 import org.sonatype.tycho.equinox.EquinoxServiceFactory;
-import org.sonatype.tycho.equinox.embedder.EquinoxRuntimeLocator;
 import org.sonatype.tycho.p2.facade.internal.P2RepositoryCacheImpl;
 import org.sonatype.tycho.p2.resolver.P2Logger;
 import org.sonatype.tycho.p2.resolver.P2Resolver;
@@ -32,12 +30,6 @@ public abstract class AbstractUpdateMojo
     protected MavenSession session;
 
     /** @component */
-    protected TychoP2RuntimeLocator p2runtime;
-
-    /** @component */
-    protected EquinoxRuntimeLocator equinoxLocator;
-
-    /** @component */
     protected EquinoxServiceFactory equinox;
 
     public void execute()
@@ -45,13 +37,6 @@ public abstract class AbstractUpdateMojo
     {
         try
         {
-            File p2Directory = p2runtime.locateTychoP2Runtime( session );
-            if ( p2Directory != null )
-            {
-                equinoxLocator.addRuntimeLocation( p2Directory );
-                getLog().debug( "Using P2 runtime at " + p2Directory );
-            }
-
             P2ResolverFactory factory = equinox.getService( P2ResolverFactory.class );
             doUpdate( factory );
         }

@@ -1,13 +1,5 @@
 package org.codehaus.tycho.osgitest.emma;
 
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.cli.CommandLineException;
-import org.codehaus.plexus.util.cli.CommandLineUtils;
-import org.codehaus.tycho.TychoProject;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,6 +15,14 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.cli.CommandLineException;
+import org.codehaus.plexus.util.cli.CommandLineUtils;
+import org.sonatype.tycho.ArtifactKey;
 
 /**
  * Mojo that will try to automatically set the command line for the OSGi test runtime
@@ -104,7 +104,7 @@ public class EmmaAutomationMojo
         throws MojoExecutionException, MojoFailureException
     {
         // only execute if this is invoked on a test plugin.
-        if ( !TychoProject.ECLIPSE_TEST_PLUGIN.equals( project.getPackaging() ) )
+        if ( !ArtifactKey.TYPE_ECLIPSE_TEST_PLUGIN.equals( project.getPackaging() ) )
         {
             return;
         }
