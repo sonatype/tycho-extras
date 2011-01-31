@@ -8,9 +8,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.maven.project.MavenProject;
-import org.codehaus.tycho.TychoConstants;
-import org.codehaus.tycho.osgitools.project.BuildOutputJar;
-import org.codehaus.tycho.osgitools.project.EclipsePluginProject;
 
 /**
  * Searches all Java source files of a Maven projects and generates a list of
@@ -35,50 +32,15 @@ class ClassNameCollector
     }
 
     /**
-     * Searches for Java source files in "src/main/java" and "src" and returns a
+     * Searches for Java source files in compile source roots and returns a
      * set of found class names.
-     *
-     * @return set of class names
      */
     public Set<String> collectJavaClassNames()
     {
         Set<String> javaClassesInSources = new TreeSet<String>();
-
-        EclipsePluginProject pdeProject =
-            (EclipsePluginProject) project.getContextValue( TychoConstants.CTX_ECLIPSE_PLUGIN_PROJECT );
-        List<File> srcFolders = new ArrayList<File>();
-        if ( pdeProject.getDotOutputJar() != null )
+        for ( String compileSourceRoot : project.getCompileSourceRoots() )
         {
-            srcFolders.addAll( pdeProject.getDotOutputJar().getSourceFolders() );
-        }
-        for ( BuildOutputJar jar : pdeProject.getOutputJars() )
-        {
-            srcFolders.addAll( jar.getSourceFolders() );
-        }
-
-        boolean sourcePathAdded = false;
-        if ( !srcFolders.isEmpty() )
-        {
-            for ( int i = 0; i < srcFolders.size(); i++ )
-            {
-                File file = srcFolders.get( i );
-                sourcePathAdded |= addSourcePath( javaClassesInSources, file );
-            }
-        }
-        if ( sourcePathAdded )
-        {
-            return javaClassesInSources;
-        }
-
-        // check if the project's source path exists
-        // note: getCompileSourceRoots() usually returns "src/main/java"
-        // which doesn't exist for "eclipse-plugin" or "eclipse-test-plugin"
-        // projects, there it is only "src"
-
-        for ( String sourcePathObj : project.getCompileSourceRoots() )
-        {
-            File sourcePath = new File( sourcePathObj );
-            addSourcePath( javaClassesInSources, sourcePath );
+            addSourcePath( javaClassesInSources, new File( compileSourceRoot ) );
         }
 
         return javaClassesInSources;
