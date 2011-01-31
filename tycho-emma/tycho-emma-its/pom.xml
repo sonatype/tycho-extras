@@ -167,7 +167,30 @@
       <version>${tycho-build-version}</version>
       <type>pom</type>
     </dependency>
+
+    <!-- tycho p2 runtime -->
     <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>org.sonatype.tycho.p2</artifactId>
+      <version>${tycho-build-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>org.sonatype.tycho.p2.impl</artifactId>
+      <version>${tycho-build-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>org.sonatype.tycho.p2.maven.repository</artifactId>
+      <version>${tycho-build-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.tycho</groupId>
+      <artifactId>org.sonatype.tycho.p2.tools.impl</artifactId>
+      <version>${tycho-build-version}</version>
+    </dependency>
+    <dependency>
+    
     	<groupId>junit</groupId>
     	<artifactId>junit</artifactId>
     	<version>4.7</version>
