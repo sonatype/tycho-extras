@@ -53,6 +53,22 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- During the unit tests, the test project is copied to the target folder and the 
+			     publish mojo is executed on the project. The test project may also be built 
+			     directly from the command line. This configuration makes sure that the target  
+			     folder from a direct invocation is removed. Otherwise it may iterfere with the 
+			     target folder created during the unit tests. -->
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>src/test/resources/testProject/target</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>

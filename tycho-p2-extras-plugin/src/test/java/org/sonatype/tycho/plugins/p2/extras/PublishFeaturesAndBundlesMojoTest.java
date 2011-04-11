@@ -58,14 +58,16 @@ public class PublishFeaturesAndBundlesMojoTest
         assertPublishedArtifact( publishedContentDir, "org.sonatype.tycho.extras.testdata", "1.0.0" );
     }
 
-    private void assertPublishedArtifact( File publishedContentDir, String bundleName, String version )
+    private static void assertPublishedArtifact( File publishedContentDir, String bundleID, String version )
     {
-        String artifactFileName = bundleName + "_" + version; // without qualifier
-        File publishedArtifact = ( new File( publishedContentDir, "plugins" ).listFiles() )[0];
+        String pluginArtifactNamePrefix = bundleID + "_" + version; // without qualifier
+        for ( File bundle : new File( publishedContentDir, "plugins" ).listFiles() )
+        {
+            if ( bundle.getName().startsWith( pluginArtifactNamePrefix ) )
+                return;
+        }
 
-        Assert.assertTrue( "Published artifact not found: " + artifactFileName,
-                           publishedArtifact.getName().startsWith( artifactFileName ) );
-
+        Assert.fail( "Published artifact not found: " + pluginArtifactNamePrefix );
     }
 
     private static void assertPublishedIU( File publishedContentDir, String iuID )
@@ -116,8 +118,8 @@ public class PublishFeaturesAndBundlesMojoTest
     private File getLocalMavenRepository()
     {
         /*
-         * The build (more specifically, the maven-properties-plugin) writes the local Maven repository location to a
-         * file. Here, we read this file. (Approach copied from tycho-its.)
+         * The build (more specifically, the maven-properties-plugin) writes the local Maven
+         * repository location to a file. Here, we read this file. (Approach copied from tycho-its.)
          */
         Properties buildProperties = new Properties();
         InputStream is = this.getClassLoader().getResourceAsStream( "baseTest.properties" );
