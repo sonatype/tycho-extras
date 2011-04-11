@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.sonatype.forge</groupId>
 		<artifactId>forge-parent</artifactId>
-		<version>6</version>
+		<version>8</version>
 	</parent>
 
 	<groupId>org.sonatype.tycho</groupId>
@@ -24,9 +24,30 @@
 
 	<modules>
 		<module>tycho-emma</module>
-        <module>tycho-version-bump-plugin</module>
+		<module>tycho-version-bump-plugin</module>
 		<module>tycho-p2-extras-plugin</module>
 	</modules>
+
+	<scm>
+		<connection>scm:git:git://github.com/sonatype/tycho-extras.git
+		</connection>
+		<developerConnection>scm:git:git@github.com:sonatype/tycho-extras.git
+		</developerConnection>
+	</scm>
+
+	<repositories>
+		<repository>
+			<id>sonatype-release</id>
+			<url>http://repository.sonatype.org/content/groups/sonatype-public-grid
+			</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+	</repositories>
 
 	<dependencyManagement>
 		<dependencies>
@@ -35,11 +56,11 @@
 				<artifactId>maven-plugin-api</artifactId>
 				<version>${maven-version}</version>
 			</dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-compat</artifactId>
-        <version>${maven-version}</version>
-      </dependency>
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-compat</artifactId>
+				<version>${maven-version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.maven</groupId>
 				<artifactId>maven-core</artifactId>
@@ -77,90 +98,32 @@
 
 		<pluginManagement>
 			<plugins>
+				<!-- m2eclipse lifecycle mapping -->
 				<plugin>
-					<groupId>org.codehaus.plexus</groupId>
-					<artifactId>plexus-component-metadata</artifactId>
-					<executions>
-						<execution>
-							<goals>
-								<goal>generate-metadata</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.4.3</version>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
 					<configuration>
-						<useSystemClassLoader>false</useSystemClassLoader>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>2.1</version>
-					<configuration>
-						<source>1.5</source>
-						<target>1.5</target>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.sonatype.plugins</groupId>
+										<artifactId>maven-properties-plugin</artifactId>
+										<versionRange>[0.0.2,)</versionRange>
+										<goals>
+											<goal>filter-file</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
-
-	<scm>
-		<connection>scm:git:git://github.com/sonatype/tycho-extras.git
-		</connection>
-		<developerConnection>scm:git:git@github.com:sonatype/tycho-extras.git
-		</developerConnection>
-	</scm>
-
-	<repositories>
-		<repository>
-			<id>sonatype-release</id>
-			<url>http://repository.sonatype.org/content/groups/sonatype-public-grid
-			</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-	</repositories>
-
-    <profiles>
-        <profile>
-          <id>m2e</id>
-          <activation>
-            <property>
-              <name>m2e.version</name>
-            </property>
-          </activation>
-          <build>
-            <plugins>
-              <plugin>
-                <groupId>org.maven.ide.eclipse</groupId>
-                <artifactId>lifecycle-mapping</artifactId>
-                <version>0.10.0</version>
-                <configuration>
-                  <mappingId>customizable</mappingId>
-                  <configurators>
-                    <configurator id="org.maven.ide.eclipse.jdt.javaConfigurator" />
-                    <configurator id="org.maven.ide.eclipse.modello.modelloConfigurator" />
-                    <configurator id="org.maven.ide.eclipse.plexus.annotations.plexusConfigurator" />
-                    <configurator id="org.maven.ide.eclipse.mavenarchiver.pomProperties" />
-                    <configurator id="maven-bundle-plugin" />
-                  </configurators>
-                  <mojoExecutions>
-                    <mojoExecution>org.apache.maven.plugins:maven-resources-plugin::</mojoExecution>
-                    <mojoExecution>org.apache.maven.plugins:maven-plugin-plugin::descriptor</mojoExecution>
-                  </mojoExecutions>
-                </configuration>
-              </plugin>
-    
-            </plugins>
-          </build>
-        </profile>
-    </profiles>
 </project>
