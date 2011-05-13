@@ -8,7 +8,7 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.maven.it.Verifier;
 import org.junit.Assert;
 import org.junit.Test;
-import org.sonatype.tycho.test.AbstractTychoIntegrationTest;
+import org.eclipse.tycho.test.AbstractTychoIntegrationTest;
 import org.w3c.dom.Document;
 
 public class TestArgLineConfigurationTest

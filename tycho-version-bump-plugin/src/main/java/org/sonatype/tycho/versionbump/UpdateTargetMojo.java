@@ -7,13 +7,13 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.tycho.model.Target;
-import org.codehaus.tycho.model.Target.Location;
-import org.codehaus.tycho.model.Target.Repository;
-import org.codehaus.tycho.model.Target.Unit;
-import org.sonatype.tycho.p2.resolver.P2ResolutionResult;
-import org.sonatype.tycho.p2.resolver.P2Resolver;
-import org.sonatype.tycho.p2.resolver.P2ResolverFactory;
+import org.eclipse.tycho.model.Target;
+import org.eclipse.tycho.model.Target.Location;
+import org.eclipse.tycho.model.Target.Repository;
+import org.eclipse.tycho.model.Target.Unit;
+import org.eclipse.tycho.p2.resolver.P2ResolutionResult;
+import org.eclipse.tycho.p2.resolver.P2Resolver;
+import org.eclipse.tycho.p2.resolver.P2ResolverFactory;
 
 /**
  * Quick&dirty way to update .target file to use latest versions of IUs available from specified metadata repositories.

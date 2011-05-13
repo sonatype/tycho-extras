@@ -117,9 +117,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
+      <groupId>org.eclipse.tycho</groupId>
       <artifactId>tycho-p2-runtime</artifactId>
-      <version>${tycho-build-version}</version>
+      <version>${tycho-version}</version>
       <type>zip</type>
     </dependency>
 
@@ -132,56 +132,61 @@
 
     <!-- artifacts to be tested -->
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
-      <artifactId>tycho-osgi-components</artifactId>
-      <version>${tycho-build-version}</version>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>tycho-core</artifactId>
+      <version>${tycho-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>tycho-metadata-model</artifactId>
+      <version>${tycho-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.tycho</groupId>
       <artifactId>tycho-maven-plugin</artifactId>
-      <version>${tycho-build-version}</version>
+      <version>${tycho-version}</version>
       <type>maven-plugin</type>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
-      <artifactId>maven-tycho-plugin</artifactId>
-      <version>${tycho-build-version}</version>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>tycho-pomgenerator-plugin</artifactId>
+      <version>${tycho-version}</version>
       <type>maven-plugin</type>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
-      <artifactId>maven-osgi-compiler-plugin</artifactId>
-      <version>${tycho-build-version}</version>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>tycho-compiler-plugin</artifactId>
+      <version>${tycho-version}</version>
       <type>maven-plugin</type>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
-      <artifactId>maven-osgi-packaging-plugin</artifactId>
-      <version>${tycho-build-version}</version>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>tycho-packaging-plugin</artifactId>
+      <version>${tycho-version}</version>
       <type>maven-plugin</type>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
-      <artifactId>maven-osgi-test-plugin</artifactId>
-      <version>${tycho-build-version}</version>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>tycho-surefire-plugin</artifactId>
+      <version>${tycho-version}</version>
       <type>maven-plugin</type>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
-      <artifactId>maven-osgi-source-plugin</artifactId>
-      <version>${tycho-build-version}</version>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>tycho-source-plugin</artifactId>
+      <version>${tycho-version}</version>
       <type>maven-plugin</type>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
+      <groupId>org.eclipse.tycho</groupId>
       <artifactId>tycho-p2-plugin</artifactId>
-      <version>${tycho-build-version}</version>
+      <version>${tycho-version}</version>
       <type>maven-plugin</type>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
+      <groupId>org.eclipse.tycho</groupId>
       <artifactId>target-platform-configuration</artifactId>
-      <version>${tycho-build-version}</version>
+      <version>${tycho-version}</version>
       <type>maven-plugin</type>
     </dependency>
     <dependency>
@@ -191,35 +196,24 @@
       <type>maven-plugin</type>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
+      <groupId>org.eclipse.tycho</groupId>
       <artifactId>tycho</artifactId>
-      <version>${tycho-build-version}</version>
+      <version>${tycho-version}</version>
       <type>pom</type>
     </dependency>
 
     <!-- tycho p2 runtime -->
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
-      <artifactId>org.sonatype.tycho.p2</artifactId>
-      <version>${tycho-build-version}</version>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>org.eclipse.tycho.p2.maven.repository</artifactId>
+      <version>${tycho-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
-      <artifactId>org.sonatype.tycho.p2.impl</artifactId>
-      <version>${tycho-build-version}</version>
+      <groupId>org.eclipse.tycho</groupId>
+      <artifactId>org.eclipse.tycho.p2.tools.impl</artifactId>
+      <version>${tycho-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.tycho</groupId>
-      <artifactId>org.sonatype.tycho.p2.maven.repository</artifactId>
-      <version>${tycho-build-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.sonatype.tycho</groupId>
-      <artifactId>org.sonatype.tycho.p2.tools.impl</artifactId>
-      <version>${tycho-build-version}</version>
-    </dependency>
-    <dependency>
-    
     	<groupId>junit</groupId>
     	<artifactId>junit</artifactId>
     	<version>4.7</version>
@@ -227,9 +221,9 @@
     	<scope>test</scope>
     </dependency>
     <dependency>
-    	<groupId>org.sonatype.tycho</groupId>
+    	<groupId>org.eclipse.tycho</groupId>
     	<artifactId>tycho-testing-harness</artifactId>
-    	<version>${tycho-build-version}</version>
+    	<version>${tycho-version}</version>
     </dependency>
   </dependencies>
 

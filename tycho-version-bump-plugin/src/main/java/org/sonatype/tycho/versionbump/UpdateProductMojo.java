@@ -11,12 +11,12 @@ import java.util.Map;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.Authentication;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.tycho.model.PluginRef;
-import org.codehaus.tycho.model.ProductConfiguration;
-import org.codehaus.tycho.p2.P2ArtifactRepositoryLayout;
-import org.sonatype.tycho.p2.resolver.P2ResolutionResult;
-import org.sonatype.tycho.p2.resolver.P2Resolver;
-import org.sonatype.tycho.p2.resolver.P2ResolverFactory;
+import org.eclipse.tycho.model.PluginRef;
+import org.eclipse.tycho.model.ProductConfiguration;
+import org.eclipse.tycho.core.p2.P2ArtifactRepositoryLayout;
+import org.eclipse.tycho.p2.resolver.P2ResolutionResult;
+import org.eclipse.tycho.p2.resolver.P2Resolver;
+import org.eclipse.tycho.p2.resolver.P2ResolverFactory;
 
 /**
  * Quick&dirty way to update .product file to use latest versions of IUs available from specified metadata repositories.

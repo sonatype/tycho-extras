@@ -17,7 +17,7 @@ import org.apache.maven.plugin.LegacySupport;
 import org.apache.maven.plugin.Mojo;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.RepositorySystem;
-import org.codehaus.tycho.testing.AbstractTychoMojoTestCase;
+import org.eclipse.tycho.testing.AbstractTychoMojoTestCase;
 
 import de.pdark.decentxml.Document;
 import de.pdark.decentxml.Element;

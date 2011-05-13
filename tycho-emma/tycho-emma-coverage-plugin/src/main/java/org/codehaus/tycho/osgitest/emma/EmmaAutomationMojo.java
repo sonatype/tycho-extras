@@ -22,7 +22,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
-import org.sonatype.tycho.ArtifactKey;
+import org.eclipse.tycho.ArtifactKey;
 
 /**
  * Mojo that will try to automatically set the command line for the OSGi test runtime

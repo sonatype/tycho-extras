@@ -13,13 +13,13 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.codehaus.tycho.utils.ExecutionEnvironmentUtils;
-import org.codehaus.tycho.utils.PlatformPropertiesUtils;
-import org.sonatype.tycho.equinox.EquinoxServiceFactory;
-import org.sonatype.tycho.p2.facade.internal.P2RepositoryCacheImpl;
-import org.sonatype.tycho.p2.resolver.P2Logger;
-import org.sonatype.tycho.p2.resolver.P2Resolver;
-import org.sonatype.tycho.p2.resolver.P2ResolverFactory;
+import org.eclipse.tycho.core.utils.ExecutionEnvironmentUtils;
+import org.eclipse.tycho.core.utils.PlatformPropertiesUtils;
+import org.eclipse.tycho.equinox.EquinoxServiceFactory;
+import org.eclipse.tycho.p2.facade.internal.P2RepositoryCacheImpl;
+import org.eclipse.tycho.p2.resolver.P2Logger;
+import org.eclipse.tycho.p2.resolver.P2Resolver;
+import org.eclipse.tycho.p2.resolver.P2ResolverFactory;
 
 public abstract class AbstractUpdateMojo
     extends AbstractMojo

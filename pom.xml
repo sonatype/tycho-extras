@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.sonatype.forge</groupId>
 		<artifactId>forge-parent</artifactId>
-		<version>8</version>
+		<version>10</version>
 	</parent>
 
 	<groupId>org.sonatype.tycho</groupId>
@@ -19,7 +19,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven-version>3.0</maven-version>
-		<tycho-version>0.11.0</tycho-version>
+		<tycho-version>0.12.0</tycho-version>
 	</properties>
 
 	<modules>
@@ -66,11 +66,12 @@
 				<artifactId>maven-core</artifactId>
 				<version>${maven-version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.sonatype.tycho</groupId>
-				<artifactId>tycho-osgi-components</artifactId>
+      <dependency>
+				<groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-core</artifactId>
 				<version>${tycho-version}</version>
 			</dependency>
+			
 		</dependencies>
 	</dependencyManagement>
 
