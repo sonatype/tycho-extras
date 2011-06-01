@@ -1,4 +1,4 @@
-package org.sonatype.tycho.versionbump;
+package org.eclipse.tycho.versionbump;
 
 import java.io.File;
 import java.io.IOException;

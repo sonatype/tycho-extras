@@ -1,4 +1,4 @@
-package org.codehaus.tycho.osgitest.emma;
+package org.eclipse.tycho.osgitest.emma;
 
 import java.io.File;
 import java.util.ArrayList;

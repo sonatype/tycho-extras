@@ -1,4 +1,4 @@
-package org.sonatype.tycho.plugins.p2.extras;
+package org.eclipse.tycho.plugins.p2.extras;
 
 import java.io.File;
 import java.io.IOException;

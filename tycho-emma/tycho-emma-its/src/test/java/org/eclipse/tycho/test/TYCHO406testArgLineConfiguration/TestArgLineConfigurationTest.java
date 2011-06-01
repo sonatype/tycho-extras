@@ -1,4 +1,4 @@
-package org.sonatype.tycho.test.TYCHO406testArgLineConfiguration;
+package org.eclipse.tycho.test.TYCHO406testArgLineConfiguration;
 
 import java.io.File;
 
