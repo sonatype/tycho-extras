@@ -54,8 +54,8 @@ public class PublishFeaturesAndBundlesMojoTest
 
         publishMojo.execute();
 
-        assertPublishedIU( publishedContentDir, "org.sonatype.tycho.extras.testdata" );
-        assertPublishedArtifact( publishedContentDir, "org.sonatype.tycho.extras.testdata", "1.0.0" );
+        assertPublishedIU( publishedContentDir, "org.eclipse.tycho.extras.testdata" );
+        assertPublishedArtifact( publishedContentDir, "org.eclipse.tycho.extras.testdata", "1.0.0" );
     }
 
     private static void assertPublishedArtifact( File publishedContentDir, String bundleID, String version )
