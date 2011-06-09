@@ -24,7 +24,6 @@
 	<name>Tycho Emma Coverage Plugin Integration Tests</name>
 
 	<properties>
-		<tycho-build-version>${project.version}</tycho-build-version>
 		<maven-dir>${project.build.directory}/apache-maven-${maven-version}</maven-dir>
 	</properties>
 
@@ -83,17 +82,6 @@
 				</executions>
 			</plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<failIfNoTests>true</failIfNoTests>
-					<systemPropertyVariables>
-						<it.cliOptions>${it.cliOptions}</it.cliOptions>
-					</systemPropertyVariables>
-				</configuration>
-			</plugin>
-
 		</plugins>
 
 		<pluginManagement>
@@ -130,112 +118,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho-p2-runtime</artifactId>
-			<version>${tycho-version}</version>
-			<type>zip</type>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.maven.shared</groupId>
-			<artifactId>maven-verifier</artifactId>
-			<version>1.2</version>
-		</dependency>
-
-
-		<!-- artifacts to be tested -->
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho-core</artifactId>
-			<version>${tycho-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho-metadata-model</artifactId>
-			<version>${tycho-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho-maven-plugin</artifactId>
-			<version>${tycho-version}</version>
-			<type>maven-plugin</type>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho-pomgenerator-plugin</artifactId>
-			<version>${tycho-version}</version>
-			<type>maven-plugin</type>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho-compiler-plugin</artifactId>
-			<version>${tycho-version}</version>
-			<type>maven-plugin</type>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho-packaging-plugin</artifactId>
-			<version>${tycho-version}</version>
-			<type>maven-plugin</type>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho-surefire-plugin</artifactId>
-			<version>${tycho-version}</version>
-			<type>maven-plugin</type>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho-source-plugin</artifactId>
-			<version>${tycho-version}</version>
-			<type>maven-plugin</type>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho-p2-plugin</artifactId>
-			<version>${tycho-version}</version>
-			<type>maven-plugin</type>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>target-platform-configuration</artifactId>
-			<version>${tycho-version}</version>
-			<type>maven-plugin</type>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.tycho.extras</groupId>
-			<artifactId>tycho-emma-coverage-plugin</artifactId>
-			<version>${tycho-build-version}</version>
-			<type>maven-plugin</type>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho</artifactId>
-			<version>${tycho-version}</version>
-			<type>pom</type>
-		</dependency>
-
-		<!-- tycho p2 runtime -->
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>org.eclipse.tycho.p2.maven.repository</artifactId>
-			<version>${tycho-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>org.eclipse.tycho.p2.tools.impl</artifactId>
-			<version>${tycho-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.7</version>
-			<type>jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.tycho</groupId>
 			<artifactId>tycho-testing-harness</artifactId>
-			<version>${tycho-version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

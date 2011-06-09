@@ -24,11 +24,9 @@
 	<packaging>pom</packaging>
 	<name>Tycho EMMA Integration</name>
 
-
 	<modules>
 		<module>tycho-emma-coverage-plugin</module>
 		<module>tycho-emma-its</module>
 	</modules>
-
 
 </project>
