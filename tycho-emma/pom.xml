@@ -22,7 +22,8 @@
 
 	<artifactId>tycho-emma</artifactId>
 	<packaging>pom</packaging>
-	<name>Tycho EMMA Integration</name>
+
+	<name>Tycho Emma Integration (Incubation)</name>
 
 	<modules>
 		<module>tycho-emma-coverage-plugin</module>

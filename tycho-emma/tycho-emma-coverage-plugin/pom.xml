@@ -21,10 +21,10 @@
 	</parent>
 
 	<artifactId>tycho-emma-coverage-plugin</artifactId>
-
-	<name>Tycho Emma Coverage Plugin</name>
-	<description>Emma plugin for OSGi test to enable code coverage.</description>
 	<packaging>maven-plugin</packaging>
+
+	<name>Tycho Emma Coverage Plugin (Incubation)</name>
+	<description>Maven plugin to measure code coverage in OSGi tests using EMMA</description>
 
 	<dependencies>
 		<dependency>

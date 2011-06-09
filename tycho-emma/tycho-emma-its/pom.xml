@@ -21,7 +21,7 @@
 	</parent>
 	<artifactId>tycho-emma-its</artifactId>
 
-	<name>Tycho Emma Coverage Plugin Integration Tests</name>
+	<name>Tycho Emma Coverage Plugin Integration Tests (Incubation)</name>
 
 	<properties>
 		<maven-dir>${project.build.directory}/apache-maven-${maven-version}</maven-dir>
