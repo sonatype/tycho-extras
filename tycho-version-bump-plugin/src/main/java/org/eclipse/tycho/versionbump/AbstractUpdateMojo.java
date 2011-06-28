@@ -23,13 +23,14 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.plexus.logging.Logger;
 import org.eclipse.tycho.core.utils.ExecutionEnvironmentUtils;
 import org.eclipse.tycho.core.utils.PlatformPropertiesUtils;
 import org.eclipse.tycho.equinox.EquinoxServiceFactory;
-import org.eclipse.tycho.p2.facade.internal.P2RepositoryCacheImpl;
-import org.eclipse.tycho.p2.resolver.P2Logger;
-import org.eclipse.tycho.p2.resolver.P2Resolver;
-import org.eclipse.tycho.p2.resolver.P2ResolverFactory;
+import org.eclipse.tycho.osgi.adapters.MavenLoggerAdapter;
+import org.eclipse.tycho.p2.resolver.facade.P2Resolver;
+import org.eclipse.tycho.p2.resolver.facade.P2ResolverFactory;
+import org.eclipse.tycho.p2.resolver.facade.ResolutionContext;
 
 public abstract class AbstractUpdateMojo extends AbstractMojo {
     /**
@@ -40,10 +41,17 @@ public abstract class AbstractUpdateMojo extends AbstractMojo {
     /** @component */
     protected EquinoxServiceFactory equinox;
 
+    /** @component */
+    private Logger logger;
+
+    protected P2Resolver p2;
+
+    protected ResolutionContext resolutionContext;
+
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
-            P2ResolverFactory factory = equinox.getService(P2ResolverFactory.class);
-            doUpdate(factory);
+            createResolver();
+            doUpdate();
         } catch (Exception e) {
             throw new MojoExecutionException("Could not update " + getTargetFile().getAbsolutePath(), e);
         }
@@ -51,30 +59,14 @@ public abstract class AbstractUpdateMojo extends AbstractMojo {
 
     protected abstract File getTargetFile();
 
-    protected abstract void doUpdate(P2ResolverFactory factory) throws IOException, URISyntaxException;
+    protected abstract void doUpdate() throws IOException, URISyntaxException;
 
-    protected P2Resolver newResolver(P2ResolverFactory factory) {
-        P2Resolver p2 = factory.createResolver();
-        p2.setRepositoryCache(new P2RepositoryCacheImpl());
-        p2.setLocalRepositoryLocation(new File(session.getLocalRepository().getBasedir()));
-        p2.setLogger(new P2Logger() {
-            public void debug(String message) {
-                if (message != null && message.length() > 0) {
-                    getLog().info(message); // TODO
-                }
-            }
-
-            public void info(String message) {
-                if (message != null && message.length() > 0) {
-                    getLog().info(message);
-                }
-            }
-
-            public boolean isDebugEnabled() {
-                return getLog().isDebugEnabled();
-            }
-        });
-        return p2;
+    private void createResolver() {
+        P2ResolverFactory factory = equinox.getService(P2ResolverFactory.class);
+        MavenLoggerAdapter loggerAdapter = new MavenLoggerAdapter(logger, false);
+        p2 = factory.createResolver(loggerAdapter);
+        File localMavenRepositoryRoot = new File(session.getLocalRepository().getBasedir());
+        resolutionContext = factory.createResolutionContext(localMavenRepositoryRoot, false, loggerAdapter);
     }
 
     protected List<Map<String, String>> getEnvironments() {

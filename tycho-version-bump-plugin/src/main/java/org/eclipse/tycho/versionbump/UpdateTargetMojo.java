@@ -21,9 +21,8 @@ import org.eclipse.tycho.model.Target;
 import org.eclipse.tycho.model.Target.Location;
 import org.eclipse.tycho.model.Target.Repository;
 import org.eclipse.tycho.model.Target.Unit;
-import org.eclipse.tycho.p2.resolver.P2ResolutionResult;
-import org.eclipse.tycho.p2.resolver.P2Resolver;
-import org.eclipse.tycho.p2.resolver.P2ResolverFactory;
+import org.eclipse.tycho.p2.resolver.facade.P2ResolutionResult;
+import org.eclipse.tycho.p2.resolver.facade.P2Resolver;
 
 /**
  * Quick&dirty way to update .target file to use latest versions of IUs available from specified
@@ -37,23 +36,21 @@ public class UpdateTargetMojo extends AbstractUpdateMojo {
      */
     private File targetFile;
 
-    protected void doUpdate(P2ResolverFactory factory) throws IOException, URISyntaxException {
-        P2Resolver p2 = newResolver(factory);
+    protected void doUpdate() throws IOException, URISyntaxException {
 
         Target target = Target.read(targetFile);
 
         for (Location location : target.getLocations()) {
             for (Repository repository : location.getRepositories()) {
                 URI uri = new URI(repository.getLocation());
-                p2.addP2Repository(uri);
+                resolutionContext.addP2Repository(uri);
             }
 
             for (Unit unit : location.getUnits()) {
                 p2.addDependency(P2Resolver.TYPE_INSTALLABLE_UNIT, unit.getId(), "0.0.0");
             }
         }
-
-        P2ResolutionResult result = p2.resolveMetadata(getEnvironments().get(0));
+        P2ResolutionResult result = p2.resolveMetadata(resolutionContext, getEnvironments().get(0));
 
         Map<String, String> ius = new HashMap<String, String>();
         for (P2ResolutionResult.Entry entry : result.getArtifacts()) {

@@ -24,9 +24,8 @@ import org.apache.maven.project.MavenProject;
 import org.eclipse.tycho.core.p2.P2ArtifactRepositoryLayout;
 import org.eclipse.tycho.model.PluginRef;
 import org.eclipse.tycho.model.ProductConfiguration;
-import org.eclipse.tycho.p2.resolver.P2ResolutionResult;
-import org.eclipse.tycho.p2.resolver.P2Resolver;
-import org.eclipse.tycho.p2.resolver.P2ResolverFactory;
+import org.eclipse.tycho.p2.resolver.facade.P2ResolutionResult;
+import org.eclipse.tycho.p2.resolver.facade.P2Resolver;
 
 /**
  * Quick&dirty way to update .product file to use latest versions of IUs available from specified
@@ -46,8 +45,7 @@ public class UpdateProductMojo extends AbstractUpdateMojo {
     private MavenProject project;
 
     @Override
-    protected void doUpdate(P2ResolverFactory factory) throws IOException, URISyntaxException {
-        P2Resolver p2 = newResolver(factory);
+    protected void doUpdate() throws IOException, URISyntaxException {
 
         for (ArtifactRepository repository : project.getRemoteArtifactRepositories()) {
             URI uri = new URL(repository.getUrl()).toURI();
@@ -55,10 +53,10 @@ public class UpdateProductMojo extends AbstractUpdateMojo {
             if (repository.getLayout() instanceof P2ArtifactRepositoryLayout) {
                 Authentication auth = repository.getAuthentication();
                 if (auth != null) {
-                    p2.setCredentials(uri, auth.getUsername(), auth.getPassword());
+                    resolutionContext.setCredentials(uri, auth.getUsername(), auth.getPassword());
                 }
 
-                p2.addP2Repository(uri);
+                resolutionContext.addP2Repository(uri);
             }
         }
 
@@ -68,7 +66,7 @@ public class UpdateProductMojo extends AbstractUpdateMojo {
             p2.addDependency(P2Resolver.TYPE_ECLIPSE_PLUGIN, plugin.getId(), "0.0.0");
         }
 
-        P2ResolutionResult result = p2.resolveMetadata(getEnvironments().get(0));
+        P2ResolutionResult result = p2.resolveMetadata(resolutionContext, getEnvironments().get(0));
 
         Map<String, String> ius = new HashMap<String, String>();
         for (P2ResolutionResult.Entry entry : result.getArtifacts()) {

@@ -3,7 +3,7 @@ features and bundles publisher.
 
 Prerequisite tycho-p2-extras-plugin has been built successfully with 'mvn clean install'. 
 
-Execute 'mvn clean install -Dtycho-version=0.12.0' on 
+Execute 'mvn clean install -Dtycho-version=0.13.0-SNAPSHOT' on 
 tycho-p2-extras-plugin/src/test/resources/testProject so that the build will 
 
 (1) download the bundle cxf-bundle-2.3.1.jar into testProject/target/source/plugins (==source to be 
