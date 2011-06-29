@@ -13,7 +13,7 @@ package org.eclipse.tycho.plugins.p2.extras;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 import java.util.Properties;
 
@@ -21,7 +21,6 @@ import junit.framework.Assert;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.it.util.FileUtils;
 import org.apache.maven.it.util.IOUtil;
 import org.apache.maven.plugin.LegacySupport;
 import org.apache.maven.plugin.Mojo;
@@ -29,43 +28,42 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.RepositorySystem;
 import org.eclipse.tycho.testing.AbstractTychoMojoTestCase;
 
-import de.pdark.decentxml.Document;
-import de.pdark.decentxml.Element;
-import de.pdark.decentxml.XMLIOSource;
-import de.pdark.decentxml.XMLParser;
+public class MirrorMojoTest extends AbstractTychoMojoTestCase {
 
-public class PublishFeaturesAndBundlesMojoTest extends AbstractTychoMojoTestCase {
-
-    public void testPublisher() throws Exception {
-        File basedir = getBasedir("publisher/testProject");
+    public void testMirror() throws Exception {
+        File basedir = getBasedir("mirroring/testProject");
         List<MavenProject> projects = getSortedProjects(basedir, null);
         MavenProject project = projects.get(0);
 
         initLegacySupport(projects, project);
 
-        // simulate that content to be published has already been extracted to the target folder
-        File sourceRepositoryDir = new File(project.getFile().getParent(), "target/sourceRepository").getAbsoluteFile();
-        generateContentToBePublished(sourceRepositoryDir);
+        File publishedContentDir = new File(project.getFile().getParent(), "target/repository").getCanonicalFile();
+        File sourceRepository = new File("src/test/resources/mirroring/sourceUpdatesite").getCanonicalFile();
 
-        File publishedContentDir = new File(project.getFile().getParent(), "target/repository").getAbsoluteFile();
+        // call mirror mojo
+        Mojo mirrorMojo = lookupMojo("mirror", project.getFile());
+        setVariableValueToObject(mirrorMojo, "project", project);
+        setVariableValueToObject(mirrorMojo, "sourceRepositories", new URI[] { sourceRepository.toURI() });
+        setVariableValueToObject(mirrorMojo, "destination", publishedContentDir);
 
-        // call publisher mojo
-        Mojo publishMojo = lookupMojo("publish-features-and-bundles", project.getFile());
-        setVariableValueToObject(publishMojo, "project", project);
-        setVariableValueToObject(publishMojo, "sourceLocation", sourceRepositoryDir.toString());
-        setVariableValueToObject(publishMojo, "artifactRepositoryLocation", publishedContentDir.toString());
-        setVariableValueToObject(publishMojo, "metadataRepositoryLocation", publishedContentDir.toString());
-        setVariableValueToObject(publishMojo, "publishArtifacts", Boolean.TRUE);
+        mirrorMojo.execute();
 
-        publishMojo.execute();
-
-        assertPublishedIU(publishedContentDir, "org.eclipse.tycho.extras.testdata");
-        assertPublishedArtifact(publishedContentDir, "org.eclipse.tycho.extras.testdata", "1.0.0");
+        assertTrue(publishedContentDir.exists());
+        assertMirroredBundle(publishedContentDir, "testbundle", "1.0.0");
+        assertMirroredFeature(publishedContentDir, "testfeature", "1.0.0");
     }
 
-    private static void assertPublishedArtifact(File publishedContentDir, String bundleID, String version) {
-        String pluginArtifactNamePrefix = bundleID + "_" + version; // without qualifier
-        for (File bundle : new File(publishedContentDir, "plugins").listFiles()) {
+    private static void assertMirroredBundle(File publishedContentDir, String bundleID, String version) {
+        assertMirroredArtifact(publishedContentDir, bundleID, version, "plugins");
+    }
+
+    private static void assertMirroredFeature(File publishedContentDir, String featureID, String version) {
+        assertMirroredArtifact(publishedContentDir, featureID, version, "features");
+    }
+
+    private static void assertMirroredArtifact(File publishedContentDir, String id, String version, String folder) {
+        String pluginArtifactNamePrefix = id + "_" + version; // without qualifier
+        for (File bundle : new File(publishedContentDir, folder).listFiles()) {
             if (bundle.getName().startsWith(pluginArtifactNamePrefix))
                 return;
         }
@@ -73,30 +71,10 @@ public class PublishFeaturesAndBundlesMojoTest extends AbstractTychoMojoTestCase
         Assert.fail("Published artifact not found: " + pluginArtifactNamePrefix);
     }
 
-    private static void assertPublishedIU(File publishedContentDir, String iuID) throws IOException {
-        XMLParser parser = new XMLParser();
-        Document document = parser.parse(new XMLIOSource(new File(publishedContentDir, "content.xml")));
-        Element unitElement = document.getChild("repository/units");
-        List<Element> children = unitElement.getChildren("unit");
-        for (Element element : children) {
-            if (iuID.equals(element.getAttribute("id").getValue())) {
-                return;
-            }
-        }
-        Assert.fail("IU not found: " + iuID);
-    }
-
     private void initLegacySupport(List<MavenProject> projects, MavenProject currentProject) throws Exception {
         MavenSession session = newMavenSession(currentProject, projects);
-        System.out.println(session.getLocalRepository());
         LegacySupport buildContext = lookup(LegacySupport.class);
         buildContext.setSession(session);
-    }
-
-    private void generateContentToBePublished(File repositoryFolder) throws IOException {
-        String bundleFileName = "testdata-1.0.0-SNAPSHOT.jar";
-        URL source = getClassLoader().getResource(bundleFileName);
-        FileUtils.copyURLToFile(source, new File(repositoryFolder, "plugins/" + bundleFileName));
     }
 
     // use the normal local Maven repository (called by newMavenSession)
