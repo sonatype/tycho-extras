@@ -13,7 +13,7 @@ package org.eclipse.tycho.plugins.p2.extras;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -43,7 +43,8 @@ public class MirrorMojoTest extends AbstractTychoMojoTestCase {
         // call mirror mojo
         Mojo mirrorMojo = lookupMojo("mirror", project.getFile());
         setVariableValueToObject(mirrorMojo, "project", project);
-        setVariableValueToObject(mirrorMojo, "sourceRepositories", new URI[] { sourceRepository.toURI() });
+        setVariableValueToObject(mirrorMojo, "source",
+                Collections.singletonList(new Repository(sourceRepository.toURI())));
         setVariableValueToObject(mirrorMojo, "destination", publishedContentDir);
 
         mirrorMojo.execute();

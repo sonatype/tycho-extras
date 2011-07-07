@@ -11,7 +11,7 @@
 package org.eclipse.tycho.plugins.p2.extras;
 
 import java.io.File;
-import java.net.URI;
+import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -40,7 +40,7 @@ public class MirrorMojo extends AbstractMojo {
     private Logger logger;
 
     /** @parameter */
-    private URI[] sourceRepositories;
+    private List<Repository> source;
 
     /** @parameter default-value="${project.build.directory}/repository" */
     private File destination;
@@ -49,12 +49,17 @@ public class MirrorMojo extends AbstractMojo {
     private boolean compress = true;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
+        if (source == null)
+            throw new MojoFailureException("No source repositories specified.");
+
         final MirrorApplicationService mirrorService = p2.getService(MirrorApplicationService.class);
 
-        final RepositoryReferences sources = new RepositoryReferences();
-        for (final URI sourceRepository : sourceRepositories) {
-            sources.addMetadataRepository(sourceRepository);
-            sources.addArtifactRepository(sourceRepository);
+        final RepositoryReferences sourceDescriptor = new RepositoryReferences();
+        for (final Repository sourceRepository : source) {
+            if (sourceRepository.getLayout().hasMetadata())
+                sourceDescriptor.addMetadataRepository(sourceRepository.getLocation());
+            if (sourceRepository.getLayout().hasArtifacts())
+                sourceDescriptor.addArtifactRepository(sourceRepository.getLocation());
         }
 
         int flags = MirrorApplicationService.MIRROR_ARTIFACTS;
@@ -64,11 +69,10 @@ public class MirrorMojo extends AbstractMojo {
                 "");
 
         try {
-            mirrorService.mirrorStandalone(sources, destinationDescriptor, flags, new File(project.getBuild()
+            mirrorService.mirrorStandalone(sourceDescriptor, destinationDescriptor, flags, new File(project.getBuild()
                     .getDirectory()), new MavenLoggerAdapter(logger, false));
         } catch (final FacadeException e) {
             throw new MojoExecutionException("Error during mirroring", e);
         }
     }
-
 }
