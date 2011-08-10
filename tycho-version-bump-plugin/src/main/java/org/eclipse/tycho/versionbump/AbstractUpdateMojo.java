@@ -66,7 +66,7 @@ public abstract class AbstractUpdateMojo extends AbstractMojo {
         MavenLoggerAdapter loggerAdapter = new MavenLoggerAdapter(logger, false);
         p2 = factory.createResolver(loggerAdapter);
         File localMavenRepositoryRoot = new File(session.getLocalRepository().getBasedir());
-        resolutionContext = factory.createResolutionContext(localMavenRepositoryRoot, false, loggerAdapter);
+        resolutionContext = factory.createResolutionContext(localMavenRepositoryRoot, false, false, loggerAdapter);
     }
 
     protected List<Map<String, String>> getEnvironments() {
