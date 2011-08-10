@@ -14,7 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import junit.framework.Assert;
@@ -26,32 +28,79 @@ import org.apache.maven.plugin.LegacySupport;
 import org.apache.maven.plugin.Mojo;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.repository.RepositorySystem;
+import org.codehaus.plexus.util.FileUtils;
+import org.eclipse.core.runtime.adaptor.EclipseStarter;
 import org.eclipse.tycho.testing.AbstractTychoMojoTestCase;
 
 public class MirrorMojoTest extends AbstractTychoMojoTestCase {
 
-    public void testMirror() throws Exception {
+    private File mirrorDestinationDir;
+    private Mojo mirrorMojo;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
         File basedir = getBasedir("mirroring/testProject");
         List<MavenProject> projects = getSortedProjects(basedir, null);
         MavenProject project = projects.get(0);
-
         initLegacySupport(projects, project);
-
-        File publishedContentDir = new File(project.getFile().getParent(), "target/repository").getCanonicalFile();
-        File sourceRepository = new File("src/test/resources/mirroring/sourceUpdatesite").getCanonicalFile();
-
-        // call mirror mojo
-        Mojo mirrorMojo = lookupMojo("mirror", project.getFile());
+        mirrorDestinationDir = new File(project.getFile().getParent(), "target/repository").getCanonicalFile();
+        FileUtils.deleteDirectory(mirrorDestinationDir);
+        mirrorMojo = lookupMojo("mirror", project.getFile());
+        setVariableValueToObject(mirrorMojo, "destination", mirrorDestinationDir);
         setVariableValueToObject(mirrorMojo, "project", project);
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        // this is needed because the test uses a new PlexusContainer instance
+        // for each test method and thus the DefaultEquinoxEmbedder plexus component 
+        // is no longer a singleton
+        EclipseStarter.shutdown();
+    }
+
+    public void testMirrorFromOldStyleUpdatesite() throws Exception {
+        File sourceRepository = new File("src/test/resources/mirroring/sourceUpdatesite").getCanonicalFile();
         setVariableValueToObject(mirrorMojo, "source",
                 Collections.singletonList(new Repository(sourceRepository.toURI())));
-        setVariableValueToObject(mirrorMojo, "destination", publishedContentDir);
-
         mirrorMojo.execute();
+        assertTrue(mirrorDestinationDir.isDirectory());
+        assertEquals(1, new File(mirrorDestinationDir, "plugins").listFiles().length);
+        assertMirroredBundle(mirrorDestinationDir, "testbundle", "1.0.0");
+        assertMirroredFeature(mirrorDestinationDir, "testfeature", "1.0.0");
+    }
 
-        assertTrue(publishedContentDir.exists());
-        assertMirroredBundle(publishedContentDir, "testbundle", "1.0.0");
-        assertMirroredFeature(publishedContentDir, "testfeature", "1.0.0");
+    public void testMirrorSpecificIUFromP2Repo() throws Exception {
+        File sourceRepository = new File("src/test/resources/mirroring/sourceP2Repo").getCanonicalFile();
+        setVariableValueToObject(mirrorMojo, "source",
+                Collections.singletonList(new Repository(sourceRepository.toURI())));
+        Iu testBundleIu = new Iu();
+        testBundleIu.id = "test.bundle1";
+        setVariableValueToObject(mirrorMojo, "ius", Collections.singletonList(testBundleIu));
+        mirrorMojo.execute();
+        assertTrue(mirrorDestinationDir.isDirectory());
+        assertEquals(1, new File(mirrorDestinationDir, "plugins").listFiles().length);
+        assertMirroredBundle(mirrorDestinationDir, "test.bundle1", "1.0.0.201108100850");
+    }
+
+    public void testMirrorWithPlatformFilter() throws Exception {
+        File sourceRepository = new File("src/test/resources/mirroring/sourceP2Repo").getCanonicalFile();
+        setVariableValueToObject(mirrorMojo, "source",
+                Collections.singletonList(new Repository(sourceRepository.toURI())));
+        Iu featureIU = new Iu();
+        featureIU.id = "test.feature.feature.group";
+        setVariableValueToObject(mirrorMojo, "ius", Collections.singletonList(featureIU));
+        Map<String, String> filter = new HashMap<String, String>();
+        filter.put("osgi.os", "linux");
+        filter.put("osgi.ws", "gtk");
+        filter.put("osgi.arch", "x86_64");
+        setVariableValueToObject(mirrorMojo, "filter", filter);
+        mirrorMojo.execute();
+        assertTrue(mirrorDestinationDir.isDirectory());
+        // win32 fragment must not mirrored because platform filter does not match
+        assertEquals(2, new File(mirrorDestinationDir, "plugins").listFiles().length);
+        assertMirroredBundle(mirrorDestinationDir, "test.bundle1", "1.0.0.201108100850");
+        assertMirroredBundle(mirrorDestinationDir, "test.bundle2", "1.0.0.201108100850");
     }
 
     private static void assertMirroredBundle(File publishedContentDir, String bundleID, String version) {
