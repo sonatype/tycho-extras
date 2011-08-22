@@ -12,17 +12,15 @@ package org.eclipse.tycho.versionbump;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.tycho.model.Target;
-import org.eclipse.tycho.model.Target.Location;
-import org.eclipse.tycho.model.Target.Repository;
-import org.eclipse.tycho.model.Target.Unit;
+import org.eclipse.tycho.p2.resolver.TargetDefinitionFile;
+import org.eclipse.tycho.p2.resolver.TargetDefinitionFile.IULocation;
+import org.eclipse.tycho.p2.resolver.TargetDefinitionFile.Unit;
 import org.eclipse.tycho.p2.resolver.facade.P2ResolutionResult;
-import org.eclipse.tycho.p2.resolver.facade.P2Resolver;
+import org.eclipse.tycho.p2.target.facade.TargetDefinition;
 
 /**
  * Quick&dirty way to update .target file to use latest versions of IUs available from specified
@@ -31,6 +29,7 @@ import org.eclipse.tycho.p2.resolver.facade.P2Resolver;
  * @goal update-target
  */
 public class UpdateTargetMojo extends AbstractUpdateMojo {
+
     /**
      * @parameter expression="${target}"
      */
@@ -38,18 +37,19 @@ public class UpdateTargetMojo extends AbstractUpdateMojo {
 
     protected void doUpdate() throws IOException, URISyntaxException {
 
-        Target target = Target.read(targetFile);
+        TargetDefinitionFile target = TargetDefinitionFile.read(targetFile);
 
-        for (Location location : target.getLocations()) {
-            for (Repository repository : location.getRepositories()) {
-                URI uri = new URI(repository.getLocation());
-                resolutionContext.addP2Repository(uri);
-            }
+        for (TargetDefinition.Location location : target.getLocations()) {
+            if (location instanceof IULocation) {
+                IULocation locationImpl = (IULocation) location;
 
-            for (Unit unit : location.getUnits()) {
-                p2.addDependency(P2Resolver.TYPE_INSTALLABLE_UNIT, unit.getId(), "0.0.0");
+                for (TargetDefinition.Unit unit : locationImpl.getUnits()) {
+                    Unit unitImpl = (Unit) unit;
+                    unitImpl.setVersion("0.0.0");
+                }
             }
         }
+        resolutionContext.addTargetDefinition(target, getEnvironments());
         P2ResolutionResult result = p2.resolveMetadata(resolutionContext, getEnvironments().get(0));
 
         Map<String, String> ius = new HashMap<String, String>();
@@ -57,18 +57,24 @@ public class UpdateTargetMojo extends AbstractUpdateMojo {
             ius.put(entry.getId(), entry.getVersion());
         }
 
-        for (Location location : target.getLocations()) {
-            for (Unit unit : location.getUnits()) {
-                String version = ius.get(unit.getId());
-                if (version != null) {
-                    unit.setVersion(version);
-                } else {
-                    getLog().error("Resolution result does not contain root installable unit " + unit.getId());
+        for (TargetDefinition.Location location : target.getLocations()) {
+            if (location instanceof IULocation) {
+                IULocation locationImpl = (IULocation) location;
+
+                for (TargetDefinition.Unit unit : locationImpl.getUnits()) {
+                    Unit unitImpl = (Unit) unit;
+
+                    String version = ius.get(unitImpl.getId());
+                    if (version != null) {
+                        unitImpl.setVersion(version);
+                    } else {
+                        getLog().error("Resolution result does not contain root installable unit " + unit.getId());
+                    }
                 }
             }
         }
 
-        Target.write(target, targetFile);
+        TargetDefinitionFile.write(target, targetFile);
     }
 
     @Override
