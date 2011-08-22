@@ -132,7 +132,7 @@ public class MirrorMojo extends AbstractMojo {
      * 
      * @parameter default-value="false"
      */
-    private boolean mirrorMetadatOnly;
+    private boolean mirrorMetadataOnly;
 
     /**
      * Whether to compress the destination repository metadata files (artifacts.xml, content.xml).
@@ -163,7 +163,7 @@ public class MirrorMojo extends AbstractMojo {
         }
 
         final DestinationRepositoryDescriptor destinationDescriptor = new DestinationRepositoryDescriptor(destination,
-                "", compress, mirrorMetadatOnly, append);
+                "", compress, mirrorMetadataOnly, append);
         getLog().info("Mirroring to " + destination + "...");
         try {
             mirrorService.mirrorStandalone(sourceDescriptor, destinationDescriptor, createIUDescriptions(),
