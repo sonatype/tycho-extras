@@ -22,7 +22,7 @@
 
 	<groupId>org.eclipse.tycho.extras</groupId>
 	<artifactId>tycho-extras</artifactId>
-	<version>0.13.0-SNAPSHOT</version>
+	<version>0.13.0</version>
 	<packaging>pom</packaging>
 
 	<name>Tycho Extras (Incubation)</name>
@@ -31,7 +31,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven-version>3.0</maven-version>
-		<tycho-version>0.13.0-SNAPSHOT</tycho-version>
+		<tycho-version>0.13.0</tycho-version>
 	</properties>
 
 	<modules>
