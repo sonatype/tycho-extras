@@ -35,7 +35,6 @@
 	</properties>
 
 	<modules>
-		<module>tycho-emma</module>
 		<module>tycho-version-bump-plugin</module>
 		<module>tycho-p2-extras-plugin</module>
 	</modules>
