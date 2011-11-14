@@ -19,30 +19,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.codehaus.plexus.logging.Logger;
 import org.eclipse.tycho.core.utils.ExecutionEnvironmentUtils;
 import org.eclipse.tycho.core.utils.PlatformPropertiesUtils;
 import org.eclipse.tycho.equinox.EquinoxServiceFactory;
-import org.eclipse.tycho.osgi.adapters.MavenLoggerAdapter;
 import org.eclipse.tycho.p2.resolver.facade.P2Resolver;
 import org.eclipse.tycho.p2.resolver.facade.P2ResolverFactory;
 import org.eclipse.tycho.p2.resolver.facade.ResolutionContext;
 
 public abstract class AbstractUpdateMojo extends AbstractMojo {
-    /**
-     * @parameter expression="${session}"
-     */
-    protected MavenSession session;
 
     /** @component */
     protected EquinoxServiceFactory equinox;
-
-    /** @component */
-    private Logger logger;
 
     protected P2Resolver p2;
 
@@ -63,10 +53,8 @@ public abstract class AbstractUpdateMojo extends AbstractMojo {
 
     private void createResolver() {
         P2ResolverFactory factory = equinox.getService(P2ResolverFactory.class);
-        MavenLoggerAdapter loggerAdapter = new MavenLoggerAdapter(logger, false);
-        p2 = factory.createResolver(loggerAdapter);
-        File localMavenRepositoryRoot = new File(session.getLocalRepository().getBasedir());
-        resolutionContext = factory.createResolutionContext(localMavenRepositoryRoot, false, false, loggerAdapter);
+        p2 = factory.createResolver();
+        resolutionContext = factory.createResolutionContext(false);
     }
 
     protected List<Map<String, String>> getEnvironments() {

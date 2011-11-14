@@ -22,9 +22,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.logging.Logger;
 import org.eclipse.tycho.equinox.EquinoxServiceFactory;
-import org.eclipse.tycho.osgi.adapters.MavenLoggerAdapter;
 import org.eclipse.tycho.p2.tools.DestinationRepositoryDescriptor;
 import org.eclipse.tycho.p2.tools.FacadeException;
 import org.eclipse.tycho.p2.tools.RepositoryReferences;
@@ -47,9 +45,6 @@ public class MirrorMojo extends AbstractMojo {
 
     /** @component */
     private EquinoxServiceFactory p2;
-
-    /** @component */
-    private Logger logger;
 
     /**
      * Source repositori(es) to mirror from.
@@ -167,8 +162,7 @@ public class MirrorMojo extends AbstractMojo {
         getLog().info("Mirroring to " + destination + "...");
         try {
             mirrorService.mirrorStandalone(sourceDescriptor, destinationDescriptor, createIUDescriptions(),
-                    createMirrorOptions(), new File(project.getBuild().getDirectory()), new MavenLoggerAdapter(logger,
-                            false));
+                    createMirrorOptions(), new File(project.getBuild().getDirectory()));
         } catch (final FacadeException e) {
             throw new MojoExecutionException("Error during mirroring", e);
         }
